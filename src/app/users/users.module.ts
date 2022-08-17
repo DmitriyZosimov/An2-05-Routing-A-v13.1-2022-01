@@ -3,14 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { FormsModule } from '@angular/forms';
 
-import { UserComponent, UserListComponent, UserFormComponent } from './components';
+import { UserComponent } from './components';
 
 import { UsersRoutingModule } from './users-routing.module';
-import {UsersComponent} from "./users.component";
 
 
 @NgModule({
-  declarations: [UserComponent, UserListComponent, UserFormComponent, UsersComponent],
+  declarations: [UserComponent, UsersRoutingModule.components,],
   imports: [
     CommonModule,
     FormsModule,
