@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { FormsModule } from '@angular/forms';
 
-import { AboutComponent, MessagesComponent, PathNotFoundComponent } from './components';
+import { AboutComponent, MessagesComponent, PathNotFoundComponent, LoginComponent } from './components';
 
 @NgModule({
-  declarations: [AboutComponent, PathNotFoundComponent, MessagesComponent],
+  declarations: [AboutComponent, PathNotFoundComponent, MessagesComponent, LoginComponent],
   imports: [
     CommonModule,
     FormsModule
