@@ -23,7 +23,13 @@
         </nav>
 
         <div class="container">
-          
+          <!-- #routerOutlet="outlet" - access to the properties of router-outlet directive -->
+          <router-outlet
+            #routerOutlet="outlet"
+            (activate)='onActivate($event, routerOutlet)'
+            (deactivate)='onDeactivate($event, routerOutlet)'>
+          </router-outlet>
+          <!-- Routed views go here -->
         </div>
     </div> 
 </div>
