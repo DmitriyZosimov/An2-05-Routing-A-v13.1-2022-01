@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+
+import { Router, ActivatedRoute } from '@angular/router';
 // rxjs
 import {EMPTY, Observable} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -14,6 +16,8 @@ export class UserListComponent implements OnInit {
 
   constructor(
     private userArrayService: UserArrayService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
   }
 
@@ -26,6 +30,15 @@ export class UserListComponent implements OnInit {
         })
       );
   }
+
+  onEditUser(user: UserModel): void {
+    const link = ['/users/edit', user.id];
+    this.router.navigate(link);
+    // or
+    // const link = ['edit', user.id];
+    // this.router.navigate(link, {relativeTo: this.route});
+  }
+
 
   trackByFn(index: number, user: UserModel):
     number | null {
