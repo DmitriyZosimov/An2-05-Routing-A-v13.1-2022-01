@@ -5,7 +5,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators';
 
 import {TaskModel} from './../../models/task.model';
-import {TaskArrayService, TaskPromiseService} from './../../services';
+import {TaskPromiseService} from './../../services';
 
 @Component({
   templateUrl: './task-form.component.html',
@@ -14,7 +14,7 @@ import {TaskArrayService, TaskPromiseService} from './../../services';
 export class TaskFormComponent implements OnInit {
   task!: TaskModel;
 
-  constructor(private taskArrayService: TaskArrayService,
+  constructor(
               private router: Router,
               private route: ActivatedRoute,
               private taskPromiseService: TaskPromiseService
@@ -32,27 +32,33 @@ export class TaskFormComponent implements OnInit {
     };
     this.route.paramMap
       .pipe(
-        switchMap((params: ParamMap) =>
+        // switchMap((params: ParamMap) =>
+        //   // notes about "!"
+        //   // params.get() returns string | null, but getTask takes string | number
+        //   // in this case taskID is a path param and can not be null
+        //   this.taskPromiseService.getTask(params.get('taskID')!)),
+        switchMap((params: ParamMap) => {
           // notes about "!"
           // params.get() returns string | null, but getTask takes string | number
-          // in this case taskID is a path param and can not be null
-          this.taskPromiseService.getTask(params.get('taskID')!)),
-      // transform undefined => {}
+          // in this case taskID is NOT a path param and can not be null
+          if (params.has('taskID')) {
+            return this.taskPromiseService.getTask(params.get('taskID')!);
+          } else {
+            return Promise.resolve(undefined);
+          }
+        }),
+        // transform undefined => {}
       map(el => el ? el : {} as TaskModel))
         .subscribe(observer);
   }
 
   onSaveTask(): void {
     const task = {...this.task} as TaskModel;
-    if (task.id) {
-      // this.taskArrayService.updateTask(task);
-      this.taskPromiseService.updateTask(task)
-        .then( () => this.onGoBack() );
+    const method = task.id ? 'updateTask' : 'createTask';
+    this.taskPromiseService[method](task)
+      .then(() => this.onGoBack())
+      .catch(err => console.log(err));
 
-    } else {
-      this.taskArrayService.createTask(task);
-      this.onGoBack();
-    }
   }
 
   onGoBack(): void {

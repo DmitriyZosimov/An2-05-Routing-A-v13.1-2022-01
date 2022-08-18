@@ -28,6 +28,11 @@ export class TaskListComponent implements OnInit {
     this.router.navigate(link);
   }
 
+  onCreateTask(): void {
+    const link = ['/add'];
+    this.router.navigate(link);
+  }
+
   private async updateTask(task: TaskModel) {
     const updatedTask = await this.taskPromiseService.updateTask({
       ...task,
