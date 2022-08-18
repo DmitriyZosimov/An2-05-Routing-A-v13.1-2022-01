@@ -45,11 +45,14 @@ export class TaskFormComponent implements OnInit {
   onSaveTask(): void {
     const task = {...this.task} as TaskModel;
     if (task.id) {
-      this.taskArrayService.updateTask(task);
+      // this.taskArrayService.updateTask(task);
+      this.taskPromiseService.updateTask(task)
+        .then( () => this.onGoBack() );
+
     } else {
       this.taskArrayService.createTask(task);
+      this.onGoBack();
     }
-    this.onGoBack();
   }
 
   onGoBack(): void {

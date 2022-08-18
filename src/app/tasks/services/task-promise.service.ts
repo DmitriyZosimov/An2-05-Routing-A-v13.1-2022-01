@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {firstValueFrom} from 'rxjs';
 import {TaskModel} from './../models/task.model';
 
@@ -22,6 +22,18 @@ export class TaskPromiseService {
   getTask(id: number | string): Promise<TaskModel> {
     const url = `${this.tasksUrl}/${id}`;
     const request$ = this.http.get(url);
+    return firstValueFrom(request$)
+      .then(response => response as TaskModel)
+      .catch(this.handleError);
+  }
+
+  updateTask(task: TaskModel): Promise<TaskModel> {
+    const url = `${this.tasksUrl}/${task.id}`;
+    const body = JSON.stringify(task);
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    };
+    const request$ = this.http.put(url, body, options);
     return firstValueFrom(request$)
       .then(response => response as TaskModel)
       .catch(this.handleError);
