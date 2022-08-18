@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AboutComponent, MessagesComponent, PathNotFoundComponent, LoginComponent } from './layout';
+import { AuthGuard } from './core';
+
 const routes: Routes = [
 
   {
@@ -13,7 +15,8 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    canLoad: [AuthGuard]
   },
   {
     path: 'users',
