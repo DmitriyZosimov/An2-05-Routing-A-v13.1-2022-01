@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 
-import { MessagesService } from './core';
+import { MessagesService,  CustomPreloadingStrategyService } from './core';
 import { SpinnerService } from './widgets';
 
 
@@ -10,13 +10,21 @@ import { SpinnerService } from './widgets';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   constructor(
     public messagesService: MessagesService,
     private router: Router,
-    public spinnerService: SpinnerService
+    public spinnerService: SpinnerService,
+    private preloadingStrategy: CustomPreloadingStrategyService
   ) { }
+
+  ngOnInit(): void {
+    console.log(
+      `Preloading Modules: `,
+      this.preloadingStrategy.preloadedModules
+    );
+  }
 
   onActivate($event: any, routerOutlet: RouterOutlet): void {
     console.log('Activated Component', $event, routerOutlet);
@@ -29,6 +37,5 @@ export class AppComponent {
     this.router.navigate([{ outlets: { messages: ['messages'] } }]);
     this.messagesService.isDisplayed = true;
   }
-
 
 }
