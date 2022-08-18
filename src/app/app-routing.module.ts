@@ -7,21 +7,27 @@ const routes: Routes = [
 
   {
     path: 'about',
-    component: AboutComponent
+    component: AboutComponent,
+    data: { title: 'About' }
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    data: { title: 'Login' }
   },
   {
     path: 'admin',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-    canLoad: [AuthGuard]
+    canLoad: [AuthGuard],
+    data: { title: 'Admin' }
   },
   {
     path: 'users',
     loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
-    data: { preload: true }
+    data: {
+      preload: true,
+      title: 'Users'
+    },
   },
   {
     path: '',
@@ -37,7 +43,8 @@ const routes: Routes = [
     // The router will match this route if the URL requested
     // doesn't match any paths for routes defined in our configuration
     path: '**',
-    component: PathNotFoundComponent
+    component: PathNotFoundComponent,
+    data: { title: 'Page not found' }
   }
 ];
 
