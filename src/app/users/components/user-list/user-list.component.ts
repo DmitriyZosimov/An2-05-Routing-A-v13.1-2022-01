@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import {Router, ActivatedRoute, ParamMap} from '@angular/router';
 // rxjs
 import {EMPTY, Observable} from 'rxjs';
 import {catchError, switchMap} from 'rxjs/operators';
 import {UserModel} from './../../models/user.model';
-import {UserArrayService} from './../../services/user-array.service';
+import {UserArrayService, UserObservableService} from './../../services';
 
 @Component({
   templateUrl: './user-list.component.html',
@@ -17,22 +17,17 @@ export class UserListComponent implements OnInit {
 
   constructor(
     private userArrayService: UserArrayService,
+    private userObservableService: UserObservableService,
     private router: Router,
     private route: ActivatedRoute
   ) {
   }
 
   ngOnInit(): void {
-    this.users$ = this.userArrayService.users$
-      .pipe(
-        catchError(err => {
-          console.log(err);
-          return EMPTY;
-        })
-      );
+    this.users$ = this.userObservableService.getUsers();
     const observer = {
       next: (user: UserModel) => {
-        this.editedUser = { ...user };
+        this.editedUser = {...user};
         console.log(
           `Last time you edited user ${JSON.stringify(this.editedUser)}`
         );
