@@ -4,6 +4,7 @@ import {NgModule} from '@angular/core';
 
 import {Router} from '@angular/router';
 import {AppRoutingModule} from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 
 import {AppComponent} from './app.component';
 import {LayoutModule} from './layout/layout.module';
@@ -19,6 +20,7 @@ import { SpinnerModule } from './widgets/spinner/spinner.module';
   imports: [
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     LayoutModule,
     TasksModule,
     // UsersModule,
