@@ -20,9 +20,19 @@ const reducer = createReducer(
     console.log('UPDATE_TASK action being handled!');
     return {...state};
   }),
-  on(TasksActions.completeTask, state => {
+  on(TasksActions.completeTask, (state, { task }) => {
     console.log('COMPLETE_TASK action being handled!');
-    return {...state};
+    const id = task.id;
+    const data = state.data.map(t => {
+      if (t.id === id) {
+        return { ...task, done: true };
+      }
+      return t;
+    });
+    return {
+      ...state,
+      data
+    };
   }),
   on(TasksActions.deleteTask, state => {
     console.log('DELETE_TASK action being handled!');
