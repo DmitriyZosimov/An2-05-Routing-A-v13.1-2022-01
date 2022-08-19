@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "concurrently --kill-others \"ng serve -o\" \"json-server --watch db\/db.json\"",
+    "start": "concurrently --kill-others \"ng serve -o\" \"json-server --watch db/db.json\"",
     "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
@@ -28,6 +28,7 @@
     "@angular/cli": "^14.0.1",
     "@angular/compiler-cli": "^14.0.1",
     "@angular/language-service": "^14.0.1",
+    "@ngrx/schematics": "^14.2.0",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.20.42",
     "concurrently": "^7.3.0",
