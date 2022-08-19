@@ -1,5 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, retry, share} from 'rxjs/operators';
 import {UserModel} from './../models/user.model';
@@ -33,10 +33,28 @@ export class UserObservableService {
       );
   }
 
-  updateUser(user: UserModel) {
+  updateUser(user: UserModel): Observable<UserModel> {
+    const url = `${this.usersUrl}/${user.id}`;
+    const body = JSON.stringify(user);
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    };
+    return this.http
+      .put<UserModel>(url, body, options)
+      .pipe( catchError(this.handleError) );
   }
 
-  createUser(user: UserModel) {
+  createUser(user: UserModel): Observable<UserModel> {
+    const url = this.usersUrl;
+    const body = JSON.stringify(user);
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    };
+    return this.http
+      .post<UserModel>(url, body, options)
+      .pipe(
+        catchError( this.handleError )
+      );
   }
 
   deleteUser(user: UserModel) {

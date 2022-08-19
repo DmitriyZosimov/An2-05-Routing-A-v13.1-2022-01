@@ -1,26 +1,31 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router, UrlTree} from '@angular/router';
+import { Location } from '@angular/common';
 // rxjs
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 import {UserModel} from './../../models/user.model';
 import {UserArrayService} from './../../services/user-array.service';
 import {CanComponentDeactivate, DialogService} from './../../../core';
+import {UserObservableService} from "../../services";
 
 @Component({
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css'],
 })
-export class UserFormComponent implements OnInit, CanComponentDeactivate {
+export class UserFormComponent implements OnInit, OnDestroy, CanComponentDeactivate {
   user!: UserModel;
   originalUser!: UserModel;
 
+  private sub!: Subscription;
+
   constructor(
-    private userArrayService: UserArrayService,
     private route: ActivatedRoute,
     private router: Router,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private userObservableService: UserObservableService,
+    private location: Location
   ) {
   }
 
@@ -32,20 +37,29 @@ export class UserFormComponent implements OnInit, CanComponentDeactivate {
 
   }
 
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+  }
+
   onSaveUser(): void {
     const user = {...this.user};
-    if (user.id) {
-      this.userArrayService.updateUser(user);
-      this.router.navigate(['/users', {editedUserID: user.id}]);
-    } else {
-      this.userArrayService.createUser(user);
-      this.onGoBack();
-    }
-    this.originalUser = {...this.user};
+    const method = user.id ? 'updateUser' : 'createUser';
+    const observer = {
+      next: (savedUser: UserModel) => {
+        this.originalUser = { ...savedUser };
+        user.id
+          ? // optional parameter: http://localhost:4200/users;editedUserID=2
+          this.router.navigate(['users', { editedUserID: user.id }])
+          : this.onGoBack();
+      },
+      error: (err: any) => console.log(err)
+    };
+    this.sub = this.userObservableService[method](user).subscribe(observer);
   }
 
   onGoBack(): void {
-    this.router.navigate(['./../../'], {relativeTo: this.route});
+    // this.router.navigate(['./../../'], {relativeTo: this.route});
+    this.location.back();
   }
 
   canDeactivate():
