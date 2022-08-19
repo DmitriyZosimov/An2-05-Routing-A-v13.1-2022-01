@@ -13,6 +13,7 @@ import { TasksModule } from './tasks/tasks.module';
 // import { AdminModule } from './admin/admin.module';
 import { SpinnerModule } from './widgets/spinner/spinner.module';
 import {httpInterceptorProviders} from "./core/interceptors";
+import { RootStoreModule } from './core/@ngrx/root-store.module';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import {httpInterceptorProviders} from "./core/interceptors";
     // AdminModule,
     SpinnerModule.forRoot(),
     // MUST BE LAST
-    AppRoutingModule
+    AppRoutingModule,
+    RootStoreModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
