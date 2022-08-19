@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
-import {catchError, retry, share} from 'rxjs/operators';
+import {catchError, concatMap, retry, share} from 'rxjs/operators';
 import {UserModel} from './../models/user.model';
 import {UsersAPI} from './../users.config';
 
@@ -57,7 +57,13 @@ export class UserObservableService {
       );
   }
 
-  deleteUser(user: UserModel) {
+  deleteUser(user: UserModel): Observable<UserModel[]> {
+    const url = `${this.usersUrl}/${user.id}`;
+    return this.http.delete(url).pipe(
+      concatMap(() => this.getUsers()),
+      catchError(this.handleError)
+    );
+
   }
 
   private handleError(err: HttpErrorResponse) {

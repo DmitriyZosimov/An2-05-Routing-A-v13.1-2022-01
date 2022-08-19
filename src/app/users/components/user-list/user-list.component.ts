@@ -59,6 +59,9 @@ export class UserListComponent implements OnInit {
     // this.router.navigate(link, {relativeTo: this.route});
   }
 
+  onDeleteUser(user: UserModel): void {
+    this.users$ = this.userObservableService.deleteUser(user);
+  }
 
   trackByFn(index: number, user: UserModel):
     number | null {
