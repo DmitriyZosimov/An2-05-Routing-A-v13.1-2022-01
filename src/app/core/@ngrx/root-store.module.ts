@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {StoreModule} from "@ngrx/store";
 import { TasksStoreModule } from './tasks/tasks-store.module';
+import { metaReducers } from './meta-reducers';
 
 
 
@@ -10,6 +11,7 @@ import { TasksStoreModule } from './tasks/tasks-store.module';
   imports: [
     CommonModule,
     StoreModule.forRoot({}, {
+      metaReducers,
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true,
