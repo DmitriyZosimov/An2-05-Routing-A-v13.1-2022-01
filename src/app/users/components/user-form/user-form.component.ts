@@ -7,14 +7,15 @@ import {map} from 'rxjs/operators';
 
 import {UserModel} from './../../models/user.model';
 import {UserArrayService} from './../../services/user-array.service';
-import {CanComponentDeactivate, DialogService} from './../../../core';
+import {AutoUnsubscribe, CanComponentDeactivate, DialogService} from './../../../core';
 import {UserObservableService} from "../../services";
 
 @Component({
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css'],
 })
-export class UserFormComponent implements OnInit, OnDestroy, CanComponentDeactivate {
+@AutoUnsubscribe()
+export class UserFormComponent implements OnInit, CanComponentDeactivate {
   user!: UserModel;
   originalUser!: UserModel;
 
@@ -37,9 +38,9 @@ export class UserFormComponent implements OnInit, OnDestroy, CanComponentDeactiv
 
   }
 
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe();
-  }
+  // ngOnDestroy(): void {
+  //   this.sub?.unsubscribe();
+  // }
 
   onSaveUser(): void {
     const user = {...this.user};
