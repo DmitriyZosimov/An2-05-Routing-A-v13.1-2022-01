@@ -13,10 +13,10 @@ export class TaskModel implements Task{
 }
 
 export interface Task {
-  id?: number | null;
-  action?: string;
-  priority?: number;
-  estHours?: number;
+  id: number | null;
+  action: string;
+  priority: number;
+  estHours: number;
   actHours?: number;
   done?: boolean;
 }

@@ -4,14 +4,17 @@ import { Router } from '@angular/router';
 
 import { TaskModel } from './../../models/task.model';
 import { TaskPromiseService } from './../../services';
-import {AppState} from "../../../core/@ngrx";
-import {Store} from "@ngrx/store";
+import {AppState, TasksState} from "../../../core/@ngrx";
+import {select, Store} from "@ngrx/store";
+import {Observable} from "rxjs";
 @Component({
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
   tasks!: Promise<Array<TaskModel>>;
+  tasksState$!: Observable<TasksState>;
+
   constructor(private router: Router,
               private taskPromiseService: TaskPromiseService,
               private store: Store<AppState>
@@ -19,8 +22,7 @@ export class TaskListComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('We have a store! ', this.store);
-    // this.tasks = this.taskArrayService.getTasks();
-    this.tasks = this.taskPromiseService.getTasks();
+    this.tasksState$ = this.store.pipe(select('tasks'));
   }
   onCompleteTask(task: TaskModel): void {
     // const updatedTask = { ...task, done: true };
