@@ -12,6 +12,7 @@ import { TasksModule } from './tasks/tasks.module';
 // import { UsersModule } from './users/users.module';
 // import { AdminModule } from './admin/admin.module';
 import { SpinnerModule } from './widgets/spinner/spinner.module';
+import {httpInterceptorProviders} from "./core/interceptors";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { SpinnerModule } from './widgets/spinner/spinner.module';
     // MUST BE LAST
     AppRoutingModule
   ],
-  providers: [],
+  providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule {
