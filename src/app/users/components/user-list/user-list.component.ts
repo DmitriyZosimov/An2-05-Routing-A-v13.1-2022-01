@@ -4,8 +4,8 @@ import {Router, ActivatedRoute, ParamMap} from '@angular/router';
 // rxjs
 import {EMPTY, Observable} from 'rxjs';
 import {catchError, switchMap} from 'rxjs/operators';
-import {UserModel} from './../../models/user.model';
-import {UserArrayService, UserObservableService} from './../../services';
+import {UserModel} from '../../models/user.model';
+import { UserObservableService} from '../../services';
 
 @Component({
   templateUrl: './user-list.component.html',
@@ -16,7 +16,6 @@ export class UserListComponent implements OnInit {
   private editedUser!: UserModel;
 
   constructor(
-    private userArrayService: UserArrayService,
     private userObservableService: UserObservableService,
     private router: Router,
     private route: ActivatedRoute
@@ -36,7 +35,11 @@ export class UserListComponent implements OnInit {
     };
     this.route.paramMap
       .pipe(
-        switchMap((params: ParamMap) => this.userArrayService.getUser(params.get('editedUserID')!))
+        switchMap((params: ParamMap) => {
+          return params.has('editedUserID')
+            ? this.userObservableService.getUser(params.get('editedUserID')!)
+            : EMPTY;
+        })
       )
       .subscribe(observer);
   }

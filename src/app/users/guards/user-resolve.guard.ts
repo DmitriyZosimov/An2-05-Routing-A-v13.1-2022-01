@@ -4,7 +4,7 @@ import {ActivatedRouteSnapshot, Resolve, Router} from '@angular/router';
 import {EMPTY, Observable, of} from 'rxjs';
 import {catchError, switchMap, take, delay, finalize} from 'rxjs/operators';
 import {UserModel} from './../models/user.model';
-import {UserArrayService} from './../services/user-array.service';
+import {UserObservableService} from './../services';
 import { SpinnerService } from './../../widgets';
 
 @Injectable({
@@ -12,7 +12,7 @@ import { SpinnerService } from './../../widgets';
 })
 export class UserResolveGuard implements Resolve<UserModel> {
   constructor(
-    private userArrayService: UserArrayService,
+    private userObservableService: UserObservableService,
     private router: Router,
     private spinner: SpinnerService
   ) {
@@ -25,7 +25,7 @@ export class UserResolveGuard implements Resolve<UserModel> {
     }
     this.spinner.show();
     const id = route.paramMap.get('userID')!;
-    return this.userArrayService.getUser(id).pipe(
+    return this.userObservableService.getUser(id).pipe(
       delay(2000),
       switchMap((user: UserModel) => {
         if (user) {
